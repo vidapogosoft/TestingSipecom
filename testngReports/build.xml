@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JUnit Report in HTML" default="junit-htm-report" basedir=".">
+	<property name="junit-xml-reports-dir" value="./test-output/junitreports" />
+	<property name="report-dir" value="./test-output/junit-html-report" />
+	<target name="junit-htm-report">
+		<!-- Delete and recreate the html report directories -->
+		<delete dir="${report-dir}" failonerror="false" />
+		<mkdir dir="${report-dir}" />
+		<junitreport todir="${report-dir}">
+			<fileset dir="${junit-xml-reports-dir}">
+				<include name="**/*.xml" />
+			</fileset>
+			<report format="noframes" todir="${report-dir}" />
+		</junitreport>
+	</target>
+</project>

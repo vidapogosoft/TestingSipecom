@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="main-suite" parallel="false">
+	<listeners>
+		<listener class-name="com.javacodegeeks.testng.reports.CustomReporter" />
+	</listeners>
+	<suite-files>
+		<suite-file path="./suite1.xml" />
+		<suite-file path="./suite2.xml" />
+	</suite-files>
+    <test name="main-suite-test1">
+		<classes>
+		    <class name="com.javacodegeeks.testng.reports.TestClass" />
+			<class name="com.javacodegeeks.testng.reports.TestClass1" />
+		</classes>
+	</test>
+</suite>

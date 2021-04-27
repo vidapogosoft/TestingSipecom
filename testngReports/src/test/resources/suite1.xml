@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="suite1" parallel="false">
+	<test name="suite1-test1">
+		<classes>
+			<class name="com.javacodegeeks.testng.reports.TestClass1" />
+			<class name="com.javacodegeeks.testng.reports.TestClass2" />
+		</classes>
+	</test>
+	<test name="suite1-test2">
+		<classes>
+			<class name="com.javacodegeeks.testng.reports.TestClass3" />
+			<class name="com.javacodegeeks.testng.reports.FactoryInstantiatedTestClass"/>
+		</classes>
+	</test>
+</suite>

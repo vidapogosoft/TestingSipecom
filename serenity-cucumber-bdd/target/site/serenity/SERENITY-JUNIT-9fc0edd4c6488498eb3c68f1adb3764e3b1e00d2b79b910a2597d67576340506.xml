@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="Jorge cena" skipped="1" tests="2" time="0.79" timestamp="2020-11-26T13:53:53.804-05:00[America/Bogota]"><testcase name="Jorge cenando leche y cereales"/><testcase name="Jorge cenando tortilla"><compromised message="Cuando cumpla un aÃ±o" type="net.serenitybdd.core.exceptions.TestCompromisedException">Cuando cumpla un aÃ±o</compromised><system-err>Cuando cumpla un aÃ±o&#13;
+HoraDeCenar.jorgeCena(HoraDeCenar.java:34)&#13;
+✽.Jorge cena(src/test/resources/jorge/HoraDeCenar.feature:12)&#13;
+</system-err></testcase></testsuite>

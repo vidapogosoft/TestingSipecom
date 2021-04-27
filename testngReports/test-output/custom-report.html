@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>TestNG Html Report Example</title>
+</head>
+<body>
+Suites run: 3<br/>
+Suite>main-suite<br/>
+    Test>main-suite-test1<br/>
+        Failed>3<br/>
+            t1<br/>
+                java.lang.AssertionError: expected [true] but found [false]<br/>
+            t2<br/>
+                java.lang.AssertionError: expected [true] but found [false]<br/>
+            a2<br/>
+                org.testng.TestNGException: 
+Parameter 'param' is required by @Test on method a2 but has not been marked @Optional or defined
+in E:\Cursos\2020\SIPECOM\BBOTestNov2020\herramientas\testngReports\src\test\resources\main-suite.xml<br/>
+        Passed>5<br/>
+            t5>took 2ms<br/>
+            t3>took 0ms<br/>
+            t4>took 3ms<br/>
+            t5>took 2ms<br/>
+            a1>took 2ms<br/>
+        Skipped>0<br/>
+Suite>suite2<br/>
+    Test>suite2-test1<br/>
+        Failed>0<br/>
+        Passed>2<br/>
+            e1>took 0ms<br/>
+            e2>took 1ms<br/>
+        Skipped>0<br/>
+Suite>suite1<br/>
+    Test>suite1-test1<br/>
+        Failed>3<br/>
+            c4<br/>
+                java.lang.AssertionError: expected [true] but found [false]<br/>
+            t1<br/>
+                java.lang.AssertionError: expected [true] but found [false]<br/>
+            t2<br/>
+                java.lang.AssertionError: expected [true] but found [false]<br/>
+        Passed>7<br/>
+            c2>took 2ms<br/>
+            t5>took 3ms<br/>
+            c1>took 1ms<br/>
+            t4>took 1ms<br/>
+            t3>took 1ms<br/>
+            c3>took 1ms<br/>
+            t5>took 1ms<br/>
+        Skipped>0<br/>
+    Test>suite1-test2<br/>
+        Failed>1<br/>
+            FactoryInstantiatedTestClass-Reports<br/>
+                java.lang.AssertionError: expected [true] but found [false]<br/>
+        Passed>3<br/>
+            d1>took 4ms<br/>
+            FactoryInstantiatedTestClass-TestNG>took 3ms<br/>
+            d2>took 0ms<br/>
+        Skipped>0<br/>
+</body>

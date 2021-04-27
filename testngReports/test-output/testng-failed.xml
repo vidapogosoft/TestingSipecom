@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [suite1]">
+  <listeners>
+    <listener class-name="com.javacodegeeks.testng.reports.CustomReporter"/>
+  </listeners>
+  <test name="suite1-test1(failed)">
+    <classes>
+      <class name="com.javacodegeeks.testng.reports.TestClass1">
+        <methods>
+          <include name="t1"/>
+          <include name="t2"/>
+        </methods>
+      </class> <!-- com.javacodegeeks.testng.reports.TestClass1 -->
+      <class name="com.javacodegeeks.testng.reports.TestClass2">
+        <methods>
+          <include name="c4"/>
+        </methods>
+      </class> <!-- com.javacodegeeks.testng.reports.TestClass2 -->
+    </classes>
+  </test> <!-- suite1-test1(failed) -->
+  <test name="suite1-test2(failed)">
+    <classes>
+      <class name="com.javacodegeeks.testng.reports.FactoryInstantiatedTestClass">
+        <methods>
+          <include name="f"/>
+        </methods>
+      </class> <!-- com.javacodegeeks.testng.reports.FactoryInstantiatedTestClass -->
+    </classes>
+  </test> <!-- suite1-test2(failed) -->
+</suite> <!-- Failed suite [suite1] -->
