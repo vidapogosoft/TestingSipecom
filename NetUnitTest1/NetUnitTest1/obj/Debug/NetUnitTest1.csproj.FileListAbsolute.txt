@@ -1,0 +1,16 @@
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\NetUnitTest1.dll
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\NetUnitTest1.pdb
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\WebDriver.dll
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\bin\Debug\WebDriver.xml
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\obj\Debug\NetUnitTest1.csprojAssemblyReference.cache
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\obj\Debug\NetUnitTest1.csproj.CoreCompileInputs.cache
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\obj\Debug\NetUnitTest1.csproj.CopyComplete
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\obj\Debug\NetUnitTest1.dll
+C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetUnitTest1\NetUnitTest1\obj\Debug\NetUnitTest1.pdb
