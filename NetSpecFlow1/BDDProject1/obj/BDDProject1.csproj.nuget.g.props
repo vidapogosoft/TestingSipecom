@@ -24,6 +24,8 @@
     <Import Project="$(NuGetPackageRoot)specrun.runner\3.7.3\build\SpecRun.Runner.props" Condition="Exists('$(NuGetPackageRoot)specrun.runner\3.7.3\build\SpecRun.Runner.props')" />
     <Import Project="$(NuGetPackageRoot)specflow.tools.msbuild.generation\3.7.13\build\SpecFlow.Tools.MsBuild.Generation.props" Condition="Exists('$(NuGetPackageRoot)specflow.tools.msbuild.generation\3.7.13\build\SpecFlow.Tools.MsBuild.Generation.props')" />
     <Import Project="$(NuGetPackageRoot)specrun.specflow.3-7-0\3.7.3\build\SpecRun.SpecFlow.3-7-0.props" Condition="Exists('$(NuGetPackageRoot)specrun.specflow.3-7-0\3.7.3\build\SpecRun.SpecFlow.3-7-0.props')" />
+    <Import Project="$(NuGetPackageRoot)nunit3testadapter\3.17.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('$(NuGetPackageRoot)nunit3testadapter\3.17.0\build\net35\NUnit3TestAdapter.props')" />
+    <Import Project="$(NuGetPackageRoot)nunit\3.13.2\build\NUnit.props" Condition="Exists('$(NuGetPackageRoot)nunit\3.13.2\build\NUnit.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgSpecRun_Runner Condition=" '$(PkgSpecRun_Runner)' == '' ">C:\Users\vidapogosoft\.nuget\packages\specrun.runner\3.7.3</PkgSpecRun_Runner>

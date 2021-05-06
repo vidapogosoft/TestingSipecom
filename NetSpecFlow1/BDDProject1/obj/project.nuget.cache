@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "q4EIiSRPiz6wRhoHydxlk1CgxoUvgY7A25AQ0ymVB6DdC0kpTjBCChn/rZPsrS/fABPYhGwJslcJ2wptV62sUw==",
+  "dgSpecHash": "WT89OEXRWU7U/O1yGmUjnWESLjKRKwnBIUDDzvTQdOg7iIVwaZu1zydFIljotvsIyMa0rN1dgFc24djclagIWg==",
   "success": true,
   "projectFilePath": "C:\\vidapogosoft\\Cursos\\2021\\SIPECOM\\Testing\\code\\NetSpecFlow1\\BDDProject1\\BDDProject1.csproj",
   "expectedPackageFiles": [
@@ -11,6 +11,10 @@
     "C:\\Users\\vidapogosoft\\.nuget\\packages\\google.protobuf\\3.7.0\\google.protobuf.3.7.0.nupkg.sha512",
     "C:\\Users\\vidapogosoft\\.nuget\\packages\\microsoft.codecoverage\\16.5.0\\microsoft.codecoverage.16.5.0.nupkg.sha512",
     "C:\\Users\\vidapogosoft\\.nuget\\packages\\microsoft.net.test.sdk\\16.5.0\\microsoft.net.test.sdk.16.5.0.nupkg.sha512",
+    "C:\\Users\\vidapogosoft\\.nuget\\packages\\nunit\\3.13.2\\nunit.3.13.2.nupkg.sha512",
+    "C:\\Users\\vidapogosoft\\.nuget\\packages\\nunit3testadapter\\3.17.0\\nunit3testadapter.3.17.0.nupkg.sha512",
+    "C:\\Users\\vidapogosoft\\.nuget\\packages\\selenium.webdriver\\3.141.0\\selenium.webdriver.3.141.0.nupkg.sha512",
+    "C:\\Users\\vidapogosoft\\.nuget\\packages\\selenium.webdriver.chromedriver\\90.0.4430.2400\\selenium.webdriver.chromedriver.90.0.4430.2400.nupkg.sha512",
     "C:\\Users\\vidapogosoft\\.nuget\\packages\\specflow\\3.7.13\\specflow.3.7.13.nupkg.sha512",
     "C:\\Users\\vidapogosoft\\.nuget\\packages\\specflow.plus.livingdocplugin\\3.7.141\\specflow.plus.livingdocplugin.3.7.141.nupkg.sha512",
     "C:\\Users\\vidapogosoft\\.nuget\\packages\\specflow.tools.msbuild.generation\\3.7.13\\specflow.tools.msbuild.generation.3.7.13.nupkg.sha512",

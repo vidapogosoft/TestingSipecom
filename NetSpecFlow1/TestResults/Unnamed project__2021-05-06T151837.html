@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<title>Unnamed project Test Execution Report</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript">
+            /**
+            * jQuery.fn.sortElements
+            * --------------
+            * #author James Padolsey (http://james.padolsey.com)
+            * #version 0.11
+            * #updated 18-MAR-2010
+            * #url https://raw.github.com/jamespadolsey/jQuery-Plugins/master/sortElements/jquery.sortElements.js
+            * --------------
+            * #param Function comparator:
+            *   Exactly the same behaviour as [1,2,3].sort(comparator)
+            *   
+            * #param Function getSortable
+            *   A function that should return the element that is
+            *   to be sorted. The comparator will run on the
+            *   current collection, but you may want the actual
+            *   resulting sort to occur on a parent or another
+            *   associated element.
+            *   
+            *   E.g. $('td').sortElements(comparator, function(){
+            *      return this.parentNode; 
+            *   })
+            *   
+            *   The <td>'s parent (<tr>) will be sorted instead
+            *   of the <td> itself.
+            */
+            jQuery.fn.sortElements = (function () {
+
+                var sort = [].sort;
+
+                return function (comparator, getSortable) {
+
+                    getSortable = getSortable || function () { return this; };
+
+                    var placements = this.map(function () {
+
+                        var sortElement = getSortable.call(this),
+                parentNode = sortElement.parentNode,
+
+                        // Since the element itself will change position, we have
+                        // to have some way of storing it's original position in
+                        // the DOM. The easiest way is to have a 'flag' node:
+                nextSibling = parentNode.insertBefore(
+                    document.createTextNode(''),
+                    sortElement.nextSibling
+                );
+
+                        return function () {
+
+                            if (parentNode === this) {
+                                throw new Error(
+                        "You can't sort elements if any one is a descendant of another."
+                    );
+                            }
+
+                            // Insert before flag:
+                            parentNode.insertBefore(this, nextSibling);
+                            // Remove flag:
+                            parentNode.removeChild(nextSibling);
+
+                        };
+
+                    });
+
+                    return sort.call(this, comparator).each(function (i) {
+                        placements[i].call(getSortable.call(this));
+                    });
+
+                };
+
+            })();
+        </script>
+        <script type="text/javascript">
+            jQuery.fn.setBarSizes = (function () {
+                return function (metricName, maxBarSize, min) {
+                    var max = Math.max.apply(Math, $.makeArray($(this).map(function () { return Number($(this).attr('data-sr-' + metricName)); })));
+                    var scale = 1.0;
+                    while (max > 0.0 && max <= 10.0) {
+                        scale = scale * 10.0;
+                        max = max * 10.0;
+                    }
+                    max = (Math.ceil(max / 2) * 2) / scale;
+
+                    this.each(function () {
+                        var barAnchor = $(this).find('a');
+                        var actual = $(this).attr('data-sr-' + metricName);
+                        var newHeight = Math.max(Math.round(maxBarSize * (actual - min) / (max - min)), 2);
+                        barAnchor.css({ height: newHeight });
+                    });
+
+                    var unit = "";
+                    if (metricName.substr(metricName.length - 4, 4) === "time")
+                        unit = "s";
+
+                    $('#testview .scale-min-label').each(function () {
+                        $(this).text(min.toString() + unit);
+                    });
+                    $('#testview .scale-max-label').each(function () {
+                        $(this).text(max.toString() + unit);
+                    });
+                    var mid = max / 2;
+                    $('#testview .scale-mid-label').each(function () {
+                        $(this).text(mid.toString() + unit);
+                    });
+                };
+            })();
+
+            function getComparer(metricName, isDesc) {
+                return function (a, b) {
+                    var aNumber = Number($(a).attr('data-sr-' + metricName));
+                    var bNumber = Number($(b).attr('data-sr-' + metricName));
+                    var result = aNumber > bNumber ? 1 : (aNumber < bNumber ? -1 : 0);
+                    if (isDesc)
+                        result = -1 * result;
+
+                    if (result == 0 && metricName != "order")
+                        result = getComparer("order", false)(a, b);
+
+                    return result;
+                };
+            }
+
+            var currentSort = "";
+            function doSort(allowToggleDesc) {
+                var newSort = $("input[name='barSortOrder']:checked").val();
+                if (allowToggleDesc && currentSort == newSort) {
+                    $('#barSortDesc').click();
+                    doSort(false);
+                    return;
+                }
+                currentSort = newSort;
+                $('#testview td.testview-item').sortElements(getComparer(newSort, $('#barSortDesc').is(':checked')));
+            }
+
+
+            function doSetHeights(allowSort) {
+                var selectedMetric = $("input[name='barHeight']:checked").val();
+                $('#testview td.testview-item').setBarSizes(selectedMetric, 60, 0.0);
+
+                if (allowSort && currentSort != selectedMetric) {
+                    var $radios = $("input[name='barSortOrder']");
+                    $radios.filter('[value=' + selectedMetric + ']').attr('checked', true);
+                    $("#barSortDesc").attr("checked", [true]);
+                    doSort(false);
+                }
+            }
+
+            $(document).ready(function () {
+                $("input[name='barSortOrder']").click(function () { doSort(true); return true; });
+                $("input[name='barSortDesc']").change(function () { doSort(false); });
+                $("input[name='barHeight']").change(function () { doSetHeights(true); });
+
+                doSort(false);
+                doSetHeights(false);
+
+                $("div.scrollable").css({ 'overflow': 'auto' });
+            });
+        </script>
+
+        <style type="text/css">
+            body 
+            {
+                color: #000000;
+                font-family: Arial,Liberation Sans,DejaVu Sans,sans-serif;
+                line-height: 130%;
+            }
+            h1 {
+                font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
+                font-size: 170%;
+                font-weight: bold;
+            }            
+            h2 {
+                font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
+                font-size: 130%;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }            
+            h3 {
+                font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
+                font-size: 120%;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }            
+            a.bar
+            {
+                text-decoration: none;
+                display: block;
+                line-height: 1px;
+            }
+            .description
+            {
+                font-style: italic;
+            }
+            .log 
+            {
+                width: 600px;
+                white-space: pre-wrap;
+                display: block;
+                margin: 0px;
+            }
+            .errorMessage 
+            {
+                width: 600px;
+                color: Red;
+                font-weight: bold;
+            }
+            .stackTrace 
+            {
+                width: 600px;
+                white-space: pre-wrap;
+                font-style: italic;
+                color: Red;
+                display: block;
+            }
+            table.testEvents
+            {
+                border: solid 1px #e8eef4;
+                border-collapse: collapse;
+            }
+            table.testEvents td
+            {
+                vertical-align: top;
+                padding: 5px;
+                border: solid 1px #e8eef4;
+            }
+            table.testEvents th
+            {
+                padding: 6px 5px;
+                text-align: left;
+                background-color: #e8eef4;
+                border: solid 1px #e8eef4;                
+            }
+            .comment
+            {
+                font-style: italic;
+                font-size: smaller;
+            }
+            .startupBar
+            {
+                background-color: #EEEEEE;
+                cursor: default;
+            }
+            
+            .colorSucceeded
+            {
+                background-color: #90ED7B;
+            }
+            .colorIgnored
+            {
+                background-color: #FFFF85;
+            }
+            .colorPending
+            {
+                background-color: #D47BED;
+            }
+            .colorNothingToRun
+            {
+                background-color: #CCCCFF;
+            }
+            .colorSkipped
+            {
+                background-color: #CCCCFF;
+            }
+            .colorInconclusive
+            {
+                background-color: #7BEDED;
+            }
+            .colorCleanupFailed
+            {
+                background-color: #FFCCCC;
+            }
+            .colorRandomlyFailed
+            {
+                background-color: #EDB07B;
+            }
+            .colorFailed
+            {
+                background-color: #ED5F5F;
+            }
+            .colorInitializationFailed
+            {
+                background-color: #FF0000;
+            }
+            .colorFrameworkError
+            {
+                background-color: #FF0000;
+            }
+            ul.subNodeLinks
+            {
+                padding-left: 20px;
+                margin: 0px;
+            }
+            ul.subNodeLinks li
+            {
+                list-style: none;
+            }
+            
+            /* views general */
+            div.scrollable
+            {
+                /*overflow: auto; - thsi has to be set from js, because of an IE9 bug */
+            }
+            div.viewbox
+            {
+                position: relative;
+                border: 3px solid #e8eef4;
+            }
+            div.viewbox table
+            {
+                border: 0px;
+            }
+                        
+            /* testview */
+            #testview
+            {
+                padding-top: 23px;
+            }
+            
+            table.testview-items td
+            {
+                vertical-align: bottom;
+                padding: 0px 1px 0px 1px;
+            }
+            td.right-padding, td.left-padding
+            {
+                width: 25px;
+                min-width: 25px;
+            }
+            table.testview-items a.bar
+            {
+                width: 5px;
+            }
+            table.testview-items tr.testview-items-row
+            {
+                height: 60px;
+            }
+            
+            /* scale */
+            table.vertical-scale 
+            {
+                position: absolute;
+                top: 23px;
+                left: 0px;
+                width: 100%;
+                z-index: -100;
+            }
+            table.vertical-scale td, tr.horizontal-scale td
+            {
+                font-size: 60%;
+                line-height: normal;
+            }
+            table.vertical-scale tr.scale-max, table.vertical-scale tr.scale-mid 
+            {
+                height: 30px;
+            }
+            tr.horizontal-scale, table.vertical-scale tr.scale-min 
+            {
+                height: 12px;
+            }
+            
+            td.scale-max-label, td.scale-mid-label, td.scale-min-label
+            {
+                border-top: solid 1px #E6E6E6;
+                text-align: left;
+                vertical-align: top;
+            }
+            td.scale-10-label
+            {
+                border-left: solid 1px #E6E6E6;
+                text-align: left;
+                vertical-align: bottom;
+                padding-left: 1px;
+            }
+            tr.scale-mid td, tr.scale-min td, tr.scale-max td
+            {
+                border-top: solid 1px #E6E6E6;
+            }
+           
+            
+            /* bar-control */
+            #bar-control
+            {
+                font-size: 60%;
+                line-height: normal;
+                position: absolute;
+                right: 0px;
+                top: 0px;
+            }
+            #bar-control label
+            {
+                font-weight: bold;
+                vertical-align: middle;
+            }
+            #bar-control .option
+            {
+                vertical-align: middle;
+                text-transform: lowercase;
+            }
+            #bar-control input[type="checkbox"]
+            {
+                padding: 0 2px 0 3px;
+            }
+            #bar-control input
+            {
+                vertical-align: top;
+                height: 12px;
+                margin: 0px;
+                padding: 0px;
+            }
+            #bar-control div
+            {
+                float: right;
+                margin: 3px 5px 3px 5px;
+            }
+
+            /* timeline view */
+            #timelineview
+            {
+                padding-top: 5px;
+            }
+            table.timelineview a
+            {
+                height: 20px;
+            }
+            table.timelineview td
+            {
+                vertical-align: bottom;
+                padding: 0px 1px 0px 0px;
+                border: 0px;
+            }
+            tr.thread-items-row
+            {
+                height: 25px;
+            }
+            tr.thread-items-row td
+            {
+                vertical-align: bottom;
+            }
+            td.thread-label
+            {
+                padding: 0px 6px 0px 6px;
+                text-align: right;
+                line-height: 18px;
+                vertical-align: bottom;
+            }
+            th.thread-label
+            {
+                padding: 3px 6px 0px 6px;
+                line-height: 18px;
+                text-align: left;
+                vertical-align: bottom;
+            }
+        </style>
+	</head>
+	<body>
+        <h1>Unnamed project Test Execution Report</h1>
+        
+    <ul>
+        <li>Project: Unnamed project</li>
+        <li>Configuration: </li>
+        <li>Test Assemblies: C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetSpecFlow1\BDDProject1\bin\Debug\net472\BDDProject1.dll</li>
+        <li>Start Time: 5/6/2021 3:18:37 PM</li>
+        <li>Duration: 00:05:54.7696221</li>
+        <li>Test Threads: 1</li>
+    </ul>
+
+
+        <h2>Result: all tests passed</h2>
+        <table class="testEvents">
+                <tr>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+    </tr>
+
+                <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="7 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>7</td>
+    <td>7</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+
+        </table>
+        
+        <h2>Test Timeline Summary</h2>
+
+        <div id="timelineview" class="viewbox">
+            <div class="scrollable">
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th class="thread-label" colspan="2">thread</th>
+                    </tr>
+                        <tr class="thread-items-row">
+                            <td class="thread-label" title="Machine: HP-VPR2">#0</td>
+                            <td colspan="1">
+                                <table class="timelineview" cellpadding="0" cellspacing="0">
+                                    <tr>
+
+                                            <td>
+        <a
+            class="bar startupBar" 
+            style="width: 3px;" 
+                title="test thread startup" 
+        >&nbsp;</a>
+    </td>
+
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 6px;" 
+                title="Login Exitoso con parametros, testuser_1 (in DataDriverOutline)" 
+                href="#t-382569646.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 10px;" 
+                title="Login Exitoso con parametros, testuser_2 (in DataDriverOutline)" 
+                href="#t1151008759.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 3px;" 
+                title="Salir de web site (in DataDriverOutline)" 
+                href="#t29998922.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 7px;" 
+                title="Login Exitoso (in DataDriverSimple)" 
+                href="#t-1876972783.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 3px;" 
+                title="Salir (in DataDriverSimple)" 
+                href="#t191171360.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 8px;" 
+                title="Login Exitoso con parametros DataTable (in DataDriverTable)" 
+                href="#t1994988523.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 3px;" 
+                title="Exit de sitio web (in DataDriverTable)" 
+                href="#t1430102606.0"
+        >&nbsp;</a>
+    </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    <tr class="horizontal-scale">
+                        <td>&nbsp;</td>
+                        <td class="scale-10-label">0s</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        
+    <h2>Test Result View</h2>
+    <div id="testview" class="viewbox">
+        <div id="bar-control">
+            <div id="bar-control-sort">
+                <label>sort by:</label>
+                <span class="option"><input type="radio" name="barSortOrder" value="exectime" />Time</span>
+                <span class="option"><input type="radio" name="barSortOrder" value="acttime" />Act Time</span>
+                <span class="option"><input type="radio" name="barSortOrder" value="order" />Execution</span>
+                <span class="option"><input type="radio" name="barSortOrder" value="rescode" checked="checked" />Result</span>
+                <span class="option"><input type="checkbox" name="barSortDesc" id="barSortDesc" checked="checked" />desc</span>
+            </div>
+            <div id="bar-control-heights">
+                <label>heights:</label>
+                <span class="option"><input type="radio" checked="checked" name="barHeight" value="exectime" />Time</span>
+                <span class="option"><input type="radio" name="barHeight" value="acttime" />Act Time</span>
+            </div>
+        </div>
+        <table class="vertical-scale" cellpadding="0" cellspacing="0">
+            <tr class="scale-max">
+                <td class="left-padding scale-max-label">&nbsp;</td>
+                <td colspan="7">&nbsp;</td>
+                <td class="right-padding">&nbsp;</td>
+            </tr>
+            <tr class="scale-mid">
+                <td class="left-padding scale-mid-label">&nbsp;</td>
+                <td colspan="7">&nbsp;</td>
+                <td class="right-padding">&nbsp;</td>
+            </tr>
+            <tr class="scale-min">
+                <td class="left-padding scale-min-label">&nbsp;</td>
+                <td colspan="7">&nbsp;</td>
+                <td class="right-padding">&nbsp;</td>
+            </tr>
+        </table>
+        <div class="scrollable">
+            <table class="testview-items" cellpadding="0" cellspacing="0">
+                <tr class="testview-items-row">
+                    <td class="left-padding">&nbsp;</td>
+    <td class="testview-item" 
+        data-sr-exectime="79.8845051" data-sr-rescode="110" data-sr-order="0" data-sr-acttime="6.36">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 60px;"
+            title="Login Exitoso con parametros, testuser_1 (in DataDriverOutline)"
+            href="#t-382569646.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="74.9861656" data-sr-rescode="110" data-sr-order="1" data-sr-acttime="5.74">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 56px;"
+            title="Login Exitoso con parametros, testuser_2 (in DataDriverOutline)"
+            href="#t1151008759.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="12.2159057" data-sr-rescode="110" data-sr-order="2" data-sr-acttime="6.848">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 9px;"
+            title="Salir de web site (in DataDriverOutline)"
+            href="#t29998922.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="77.8303976" data-sr-rescode="110" data-sr-order="3" data-sr-acttime="5.932">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 58px;"
+            title="Login Exitoso (in DataDriverSimple)"
+            href="#t-1876972783.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="13.546016" data-sr-rescode="110" data-sr-order="4" data-sr-acttime="8.176">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 10px;"
+            title="Salir (in DataDriverSimple)"
+            href="#t191171360.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="79.8921604" data-sr-rescode="110" data-sr-order="5" data-sr-acttime="5.849">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 60px;"
+            title="Login Exitoso con parametros DataTable (in DataDriverTable)"
+            href="#t1994988523.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="12.7004584" data-sr-rescode="110" data-sr-order="6" data-sr-acttime="7.285">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 10px;"
+            title="Exit de sitio web (in DataDriverTable)"
+            href="#t1430102606.0">&nbsp;</a>
+    </td>
+                    <td class="right-padding">&nbsp;</td>
+                </tr>
+                <tr class="horizontal-scale">
+                    <td class="left-padding">&nbsp;</td>
+                    <td colspan="10">&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+        
+        
+    <h2>Feature Summary</h2>
+    <table class="testEvents">
+            <tr>
+            <th>Feature</th>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+            <th>Duration</th>
+    </tr>
+
+
+            <tr>
+                <td><a href="#f-1129923251">DataDriverOutline</a></td>
+                    <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="3 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>3</td>
+    <td>3</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:02:47.0865764</td>
+
+            </tr>
+            <tr>
+                <td><a href="#f-41944055">DataDriverSimple</a></td>
+                    <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="2 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>2</td>
+    <td>2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:01:31.3764136</td>
+
+            </tr>
+            <tr>
+                <td><a href="#f-1054190377">DataDriverTable</a></td>
+                    <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="2 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>2</td>
+    <td>2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:01:32.5926188</td>
+
+            </tr>
+    </table>
+
+
+        <a name="error_summary" />
+        <h2>Error Summary</h2>
+        <table class="testEvents">
+                <tr>
+            <th>Test</th>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+    </tr>
+
+        </table>
+
+        <h2>Scenario Summary</h2>
+            <a name="f-1129923251" />
+            <h3>Feature: DataDriverOutline</h3>
+                <div class="description"><pre>	Login en web site Demo QA 2</pre>
+                </div>
+            <table class="testEvents">
+                    <tr>
+            <th>Test</th>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+            <th>Duration</th>
+    </tr>
+
+                    <tr>
+                        <td>
+                                    <a href="#t-382569646.0">Scenario: Login Exitoso con parametros, testuser_1</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="1 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:01:19.8845051</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t1151008759.0">Scenario: Login Exitoso con parametros, testuser_2</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="1 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:01:14.9861656</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t29998922.0">Scenario: Salir de web site</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="1 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:12.2159057</td>
+
+                        
+                    </tr>
+            </table>
+            <a name="f-41944055" />
+            <h3>Feature: DataDriverSimple</h3>
+                <div class="description"><pre>	Login en web site Demo QA</pre>
+                </div>
+            <table class="testEvents">
+                    <tr>
+            <th>Test</th>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+            <th>Duration</th>
+    </tr>
+
+                    <tr>
+                        <td>
+                                    <a href="#t-1876972783.0">Scenario: Login Exitoso</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="1 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:01:17.8303976</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t191171360.0">Scenario: Salir</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="1 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:13.5460160</td>
+
+                        
+                    </tr>
+            </table>
+            <a name="f-1054190377" />
+            <h3>Feature: DataDriverTable</h3>
+                <div class="description"><pre>	Login en web site Demo QA 3</pre>
+                </div>
+            <table class="testEvents">
+                    <tr>
+            <th>Test</th>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+            <th>Duration</th>
+    </tr>
+
+                    <tr>
+                        <td>
+                                    <a href="#t1994988523.0">Scenario: Login Exitoso con parametros DataTable</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="1 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:01:19.8921604</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t1430102606.0">Scenario: Exit de sitio web</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+            <table class="timelineview" cellpadding="0" cellspacing="0">
+        <tr>
+    <td>
+        <a class="bar colorSucceeded" 
+           style="width: 199px;" 
+           title="1 succeeded" 
+                   ></a>
+    </td>
+        </tr>
+    </table>
+
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:12.7004584</td>
+
+                        
+                    </tr>
+            </table>
+
+        <h2>Execution Details</h2>
+            <a name="t-382569646.0" />
+            <h3>Scenario: Login Exitoso con parametros, testuser_1 (in BDDProject1, DataDriverOutline)</h3>
+                <div class="description">
+                    tags: mytag1
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 5/6/2021 3:18:39 PM</li>
+                <li>Execution time (sec): 79.8845051</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given Usuario se dirige a website demoqa.com/login</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Login Exitoso con parametros, testuser_1] -->
+                            <pre class="log">done: DataDriverOutlineSteps.GivenUsuarioSeDirigeAWebsiteDemoqa_ComLogin() (30.2s)</pre>
+                        </td>
+                        <td>Succeeded in 30.467s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When para ingresar digita su usuario testuser_1 y contrase&#241;a Test@123</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Login Exitoso con parametros, testuser_1] -->
+                            <pre class="log">done: DataDriverOutlineSteps.WhenParaIngresarDigitaSuUsuarioTestuser_YContrasenaTest(&quot;testuser_1&quot;, &quot;Test@123&quot;) (1.3s)</pre>
+                        </td>
+                        <td>Succeeded in 1.269s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And realiza click en boton Login para ingresar</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Login Exitoso con parametros, testuser_1] -->
+                            <pre class="log">done: DataDriverOutlineSteps.WhenRealizaClickEnBotonLoginParaIngresar() (5.1s)</pre>
+                        </td>
+                        <td>Succeeded in 5.09s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then Login correcto</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Login Exitoso con parametros, testuser_1] -->
+                            <pre class="log">done: DataDriverOutlineSteps.ThenLoginCorrecto() (5.1s)</pre>
+                        </td>
+                        <td>Succeeded in 5.235s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log"></pre>
+                        </td>
+                        <td>
+                            <!-- [Cleanup: Scenario - Login Exitoso con parametros, testuser_1] -->
+                            <pre class="log">Se Sale del web site
+Se Sale del web site
+Se Sale del web site</pre>
+                        </td>
+                        <td>Succeeded in 37.737s</td>
+                    </tr>
+            </table>
+            <a name="t1151008759.0" />
+            <h3>Scenario: Login Exitoso con parametros, testuser_2 (in BDDProject1, DataDriverOutline)</h3>
+                <div class="description">
+                    tags: mytag1
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 5/6/2021 3:19:59 PM</li>
+                <li>Execution time (sec): 74.9861656</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given Usuario se dirige a website demoqa.com/login</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Login Exitoso con parametros, testuser_2] -->
+                            <pre class="log">done: DataDriverOutlineSteps.GivenUsuarioSeDirigeAWebsiteDemoqa_ComLogin() (28.1s)</pre>
+                        </td>
+                        <td>Succeeded in 28.141s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When para ingresar digita su usuario testuser_2 y contrase&#241;a Test@153</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Login Exitoso con parametros, testuser_2] -->
+                            <pre class="log">done: DataDriverOutlineSteps.WhenParaIngresarDigitaSuUsuarioTestuser_YContrasenaTest(&quot;testuser_2&quot;, &quot;Test@153&quot;) (0.6s)</pre>
+                        </td>
+                        <td>Succeeded in 0.641s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And realiza click en boton Login para ingresar</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Login Exitoso con parametros, testuser_2] -->
+                            <pre class="log">done: DataDriverOutlineSteps.WhenRealizaClickEnBotonLoginParaIngresar() (5.1s)</pre>
+                        </td>
+                        <td>Succeeded in 5.099s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then Login correcto</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Login Exitoso con parametros, testuser_2] -->
+                            <pre class="log">done: DataDriverOutlineSteps.ThenLoginCorrecto() (5.0s)</pre>
+                        </td>
+                        <td>Succeeded in 5.018s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log"></pre>
+                        </td>
+                        <td>
+                            <!-- [Cleanup: Scenario - Login Exitoso con parametros, testuser_2] -->
+                            <pre class="log">Se Sale del web site
+Se Sale del web site
+Se Sale del web site</pre>
+                        </td>
+                        <td>Succeeded in 36.079s</td>
+                    </tr>
+            </table>
+            <a name="t29998922.0" />
+            <h3>Scenario: Salir de web site (in BDDProject1, DataDriverOutline)</h3>
+                <div class="description">
+                    tags: mytag2
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 5/6/2021 3:21:14 PM</li>
+                <li>Execution time (sec): 12.2159057</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When Usuario realiza Logout del site</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Salir de web site] -->
+                            <pre class="log">Se Sale del web site
+done: DataDriverOutlineSteps.WhenUsuarioRealizaLogoutDelSite() (6.8s)</pre>
+                        </td>
+                        <td>Succeeded in 6.848s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then Salio de aplicacion web</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Salir de web site] -->
+                            <pre class="log">done: DataDriverOutlineSteps.ThenSalioDeAplicacionWeb() (5.4s)</pre>
+                        </td>
+                        <td>Succeeded in 5.362s</td>
+                    </tr>
+            </table>
+            <a name="t-1876972783.0" />
+            <h3>Scenario: Login Exitoso (in BDDProject1, DataDriverSimple)</h3>
+                <div class="description">
+                    tags: mytag1
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 5/6/2021 3:21:26 PM</li>
+                <li>Execution time (sec): 77.8303976</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given Usuario se dirige a web site demoqa.com/login</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Login Exitoso] -->
+                            <pre class="log">done: DataDriverSimpleSteps.GivenUsuarioSeDirigeAWebSiteDemoqa_ComLogin() (28.9s)</pre>
+                        </td>
+                        <td>Succeeded in 28.915s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When usuario ingresa credenciales</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Login Exitoso] -->
+                            <pre class="log">done: DataDriverSimpleSteps.WhenUsuarioIngresaCredenciales() (0.8s)</pre>
+                        </td>
+                        <td>Succeeded in 0.847s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And realiza click en boton Login</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Login Exitoso] -->
+                            <pre class="log">done: DataDriverSimpleSteps.WhenRealizaClickEnBotonLogin() (5.1s)</pre>
+                        </td>
+                        <td>Succeeded in 5.085s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then Login es exitoso</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Login Exitoso] -->
+                            <pre class="log">done: DataDriverSimpleSteps.ThenLoginEsExitoso() (5.0s)</pre>
+                        </td>
+                        <td>Succeeded in 5.02s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log"></pre>
+                        </td>
+                        <td>
+                            <!-- [Cleanup: Scenario - Login Exitoso] -->
+                            <pre class="log">Se Sale del web site
+Se Sale del web site
+Se Sale del web site</pre>
+                        </td>
+                        <td>Succeeded in 37.961s</td>
+                    </tr>
+            </table>
+            <a name="t191171360.0" />
+            <h3>Scenario: Salir (in BDDProject1, DataDriverSimple)</h3>
+                <div class="description">
+                    tags: mytag2
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 5/6/2021 3:22:44 PM</li>
+                <li>Execution time (sec): 13.546016</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When Usuario realiza Logout</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Salir] -->
+                            <pre class="log">Se Sale del web site
+done: DataDriverSimpleSteps.WhenUsuarioRealizaLogout() (8.2s)</pre>
+                        </td>
+                        <td>Succeeded in 8.176s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then Salio de aplicacion</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Salir] -->
+                            <pre class="log">done: DataDriverSimpleSteps.ThenSalioDeAplicacion() (5.4s)</pre>
+                        </td>
+                        <td>Succeeded in 5.366s</td>
+                    </tr>
+            </table>
+            <a name="t1994988523.0" />
+            <h3>Scenario: Login Exitoso con parametros DataTable (in BDDProject1, DataDriverTable)</h3>
+                <div class="description">
+                    tags: mytag1
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 5/6/2021 3:22:58 PM</li>
+                <li>Execution time (sec): 79.8921604</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given Usuario ingresa a website demoqa.com/login</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Login Exitoso con parametros DataTable] -->
+                            <pre class="log">done: DataDriverTableSteps.GivenUsuarioIngresaAWebsiteDemoqa_ComLogin() (31.2s)</pre>
+                        </td>
+                        <td>Succeeded in 31.211s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When digita sus credenciales de acceso
+  --- table step argument ---
+  | username   | password |
+  | testuser_1 | Test@123 |</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Login Exitoso con parametros DataTable] -->
+                            <pre class="log">done: DataDriverTableSteps.WhenDigitaSusCredencialesDeAcceso(&lt;table&gt;) (0.7s)</pre>
+                        </td>
+                        <td>Succeeded in 0.706s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And realiza click en Login para ingresar</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Login Exitoso con parametros DataTable] -->
+                            <pre class="log">done: DataDriverTableSteps.WhenRealizaClickEnLoginParaIngresar() (5.1s)</pre>
+                        </td>
+                        <td>Succeeded in 5.143s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then Ingreso correcto</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Login Exitoso con parametros DataTable] -->
+                            <pre class="log">done: DataDriverTableSteps.ThenIngresoCorrecto() (5.0s)</pre>
+                        </td>
+                        <td>Succeeded in 5.026s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log"></pre>
+                        </td>
+                        <td>
+                            <!-- [Cleanup: Scenario - Login Exitoso con parametros DataTable] -->
+                            <pre class="log">Se Sale del web site
+Se Sale del web site
+Se Sale del web site</pre>
+                        </td>
+                        <td>Succeeded in 37.797s</td>
+                    </tr>
+            </table>
+            <a name="t1430102606.0" />
+            <h3>Scenario: Exit de sitio web (in BDDProject1, DataDriverTable)</h3>
+                <div class="description">
+                    tags: mytag2
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 5/6/2021 3:24:18 PM</li>
+                <li>Execution time (sec): 12.7004584</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When Usuario realiza Log out</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Exit de sitio web] -->
+                            <pre class="log">Se Sale del web site
+done: DataDriverTableSteps.WhenUsuarioRealizaLogOut() (7.3s)</pre>
+                        </td>
+                        <td>Succeeded in 7.285s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then Salio</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Exit de sitio web] -->
+                            <pre class="log">done: DataDriverTableSteps.ThenSalio() (5.4s)</pre>
+                        </td>
+                        <td>Succeeded in 5.412s</td>
+                    </tr>
+            </table>
+	</body>
+</html>

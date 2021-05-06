@@ -59,6 +59,22 @@
               "target": "Package",
               "version": "[16.5.0, )"
             },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.13.2, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[3.17.0, )"
+            },
+            "Selenium.WebDriver": {
+              "target": "Package",
+              "version": "[3.141.0, )"
+            },
+            "Selenium.WebDriver.ChromeDriver": {
+              "target": "Package",
+              "version": "[90.0.4430.2400, )"
+            },
             "SpecFlow.Plus.LivingDocPlugin": {
               "target": "Package",
               "version": "[3.7.141, )"
