@@ -1,6 +1,0 @@
-C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetSpecFlow1\NetSpecFlow1\bin\Debug\NetSpecFlow1.dll
-C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetSpecFlow1\NetSpecFlow1\bin\Debug\NetSpecFlow1.pdb
-C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetSpecFlow1\NetSpecFlow1\obj\Debug\NetSpecFlow1.csprojAssemblyReference.cache
-C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetSpecFlow1\NetSpecFlow1\obj\Debug\NetSpecFlow1.csproj.CoreCompileInputs.cache
-C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetSpecFlow1\NetSpecFlow1\obj\Debug\NetSpecFlow1.dll
-C:\vidapogosoft\Cursos\2021\SIPECOM\Testing\code\NetSpecFlow1\NetSpecFlow1\obj\Debug\NetSpecFlow1.pdb

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="1" name="Sofia cena" skipped="0" tests="2" time="0.17" timestamp="2020-11-26T13:53:54.598-05:00[America/Bogota]"><testcase name="Sofia Cenando macarrones"/><testcase name="Sofia Cenando pescado con patatas"><failure message="expected:&lt;[tru]e&gt; but was:&lt;[fals]e&gt;" type="java.lang.AssertionError">expected:&lt;[tru]e&gt; but was:&lt;[fals]e&gt;</failure><system-err>expected:&lt;[tru]e&gt; but was:&lt;[fals]e&gt;&#13;
-HoraDeCenar.seComeTodo(HoraDeCenar.java:40)&#13;
-✽.se come todo(src/test/resources/sofia/HoraDeCenar.feature:13)&#13;
-</system-err></testcase></testsuite>

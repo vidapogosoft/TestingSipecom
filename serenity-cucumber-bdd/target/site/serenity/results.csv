@@ -1,5 +1,0 @@
-"Story","Title","Result","Date","Stability","Duration (s)"
-"Jorge cena","Jorge cenando leche y cereales","SUCCESS","2020-11-26T13:53:53.804-05:00[America/Bogota]","0.0","0.73"
-"Jorge cena","Jorge cenando tortilla","COMPROMISED","2020-11-26T13:53:54.536-05:00[America/Bogota]","0.0","0.06"
-"Sofia cena","Sofia Cenando macarrones","SUCCESS","2020-11-26T13:53:54.598-05:00[America/Bogota]","0.0","0.01"
-"Sofia cena","Sofia Cenando pescado con patatas","FAILURE","2020-11-26T13:53:54.615-05:00[America/Bogota]","0.0","0.16"
