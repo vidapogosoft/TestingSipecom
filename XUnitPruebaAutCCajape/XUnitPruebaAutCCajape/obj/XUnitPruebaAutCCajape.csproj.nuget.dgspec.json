@@ -1,0 +1,90 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Users\\ccajape\\source\\repos\\XUnitPruebaAutCCajape\\XUnitPruebaAutCCajape\\XUnitPruebaAutCCajape.csproj": {}
+  },
+  "projects": {
+    "D:\\Users\\ccajape\\source\\repos\\XUnitPruebaAutCCajape\\XUnitPruebaAutCCajape\\XUnitPruebaAutCCajape.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Users\\ccajape\\source\\repos\\XUnitPruebaAutCCajape\\XUnitPruebaAutCCajape\\XUnitPruebaAutCCajape.csproj",
+        "projectName": "XUnitPruebaAutCCajape",
+        "projectPath": "D:\\Users\\ccajape\\source\\repos\\XUnitPruebaAutCCajape\\XUnitPruebaAutCCajape\\XUnitPruebaAutCCajape.csproj",
+        "packagesPath": "D:\\Users\\ccajape\\.nuget\\packages\\",
+        "outputPath": "D:\\Users\\ccajape\\source\\repos\\XUnitPruebaAutCCajape\\XUnitPruebaAutCCajape\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\Users\\ccajape\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.5.0, )"
+            },
+            "Selenium.Support": {
+              "target": "Package",
+              "version": "[3.141.0, )"
+            },
+            "Selenium.WebDriver": {
+              "target": "Package",
+              "version": "[3.141.0, )"
+            },
+            "Selenium.WebDriver.ChromeDriver": {
+              "target": "Package",
+              "version": "[91.0.4472.10100, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
