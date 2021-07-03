@@ -1,0 +1,14 @@
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\bin\Debug\netcoreapp2.2\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\bin\Debug\netcoreapp2.2\xunit.runner.reporters.netcoreapp10.dll
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\bin\Debug\netcoreapp2.2\xunit.runner.utility.netcoreapp10.dll
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\bin\Debug\netcoreapp2.2\NetXUnit1.deps.json
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\bin\Debug\netcoreapp2.2\NetXUnit1.runtimeconfig.json
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\bin\Debug\netcoreapp2.2\NetXUnit1.runtimeconfig.dev.json
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\bin\Debug\netcoreapp2.2\NetXUnit1.dll
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\bin\Debug\netcoreapp2.2\NetXUnit1.pdb
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\obj\Debug\netcoreapp2.2\NetXUnit1.csprojAssemblyReference.cache
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\obj\Debug\netcoreapp2.2\NetXUnit1.csproj.CoreCompileInputs.cache
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\obj\Debug\netcoreapp2.2\NetXUnit1.AssemblyInfoInputs.cache
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\obj\Debug\netcoreapp2.2\NetXUnit1.AssemblyInfo.cs
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\obj\Debug\netcoreapp2.2\NetXUnit1.dll
+D:\SVAP\TestingSipecom-main\TestingSipecom-main\NetXUnit1\NetXUnit1\obj\Debug\netcoreapp2.2\NetXUnit1.pdb
