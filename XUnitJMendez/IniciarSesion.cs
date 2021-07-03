@@ -9,6 +9,7 @@ namespace XUnitJMendez
 {
     public class IniciarSesion
     {
+		//Variables globales
         private readonly string User = "LoginUser_UserName";
         private readonly string Password = "LoginUser_Password";
         private readonly string Login = "LoginUser_LoginButton";
